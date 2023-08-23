@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-import { faker } from "@faker-js/faker"
+// import { faker } from "@faker-js/faker"
 
 import { v4 as uuidv4 } from "uuid";
 
