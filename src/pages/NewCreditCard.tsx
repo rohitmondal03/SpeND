@@ -26,9 +26,9 @@ const NewCreditCard = () => {
     const [date, setDate] = useState<string | undefined>()
 
     const user = useUser();
-    const supabase = useSupabaseClient();
-
     const userID = user?.id;
+
+    const supabase = useSupabaseClient();
 
 
 
@@ -56,7 +56,6 @@ const NewCreditCard = () => {
         },
     };
 
-
     const queryListVariants = {
         hidden: { opacity: 0, x: 300 },
         show: {
@@ -74,8 +73,8 @@ const NewCreditCard = () => {
 
         if (error) {
             toast({
-                title: "Already Registered !!",
-                description: `Looks like you have already registered a query !!!`,
+                title: "Some error !!",
+                description: `Looks like you have already registered a query or not have not selected a date !!!`,
                 action: (
                     <ToastAction altText="Close">Close</ToastAction>
                 )
@@ -117,7 +116,8 @@ const NewCreditCard = () => {
 
             return fullDate;
         }
-        setDate(fullDate())
+        if(queryDate === undefined) setDate("Please select a Date !!!")
+        else setDate(fullDate())
     }, [queryDate])
 
 
@@ -206,7 +206,6 @@ const NewCreditCard = () => {
                             className="border rounded-lg border-zinc-900 dark:border-zinc-200"
                             disabled={{ before: new Date(tomorrowDate) }}
                         />
-
                         <Alert className="text-center border border-zinc-900 dark:border-zinc-200">
                             <AlertTitle className="text-xl font-bold">Selected Date</AlertTitle>
                             <AlertDescription>{date}</AlertDescription>
