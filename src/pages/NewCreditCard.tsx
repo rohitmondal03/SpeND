@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
@@ -15,6 +15,7 @@ import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import DialogForCreditCard from "../components/new-credit-card";
 import SignInBtn from "../components/signin-btn";
+import Loading from "@/components/loading";
 
 
 const NewCreditCard = () => {
@@ -89,7 +90,6 @@ const NewCreditCard = () => {
                 )
             })
         }
-
     }, [date])
 
 
@@ -123,8 +123,8 @@ const NewCreditCard = () => {
 
 
     return (
-        <section className="py-8 px-5 sm:py-12 sm:px-8">
-            <div className="flex flex-col md:flex-row-reverse items-center sm:px-10 sm:gap-x-10 sm:justify-around">
+        <section className="py-8 px-5 md:py-12 sm:px-8">
+            <div className="flex flex-col md:flex-row-reverse items-center sm:px-10 md:py-20 sm:gap-x-16 sm:justify-between">
                 <motion.div
                     className="flex flex-col items-center justify-center gap-y-6 md:gap-y-9"
                     initial={{ opacity: 0 }}
@@ -132,7 +132,7 @@ const NewCreditCard = () => {
                     transition={{ duration: 0.75 }}
                 >
                     <h1
-                        className={`md:text-4xl sm:text-4xl text-3xl text-center font-bold dark:text-emerald-300`}
+                        className={`md:text-6xl sm:text-4xl text-3xl text-center font-bold text-blue-500 dark:text-emerald-300`}
                     >
                         Seamless Spending, Boundless Rewards: Experience the Future of
                         Credit Cards Today!
@@ -157,27 +157,6 @@ const NewCreditCard = () => {
                         <SignInBtn />
                     )}
                 </motion.div>
-
-                <motion.div
-                    className="shadow-[0_0_80px] rounded-2xl scale-50 hidden md:block shadow-pink-300 dark:shadow-zinc-600 dark:brightness-100"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                        duration: 0.5,
-                        delay: 2,
-                        type: "spring",
-                        stiffness: 100,
-                    }}
-                >
-                    <img
-                        src={"/assets/credit-card.jpg"}
-                        alt="credit card image"
-                        height={600}
-                        width={600}
-                        className="rounded-2xl"
-                        loading="eager"
-                    />
-                </motion.div>
             </div>
 
 
@@ -186,67 +165,68 @@ const NewCreditCard = () => {
                 className="h-[4px] bg-zinc-500 dark:bg-zinc-100 my-16"
             />
 
+            <Suspense fallback={<Loading />}>
+                <div className="flex flex-col md:flex-row items-center justify-around gap-y-12 md:gap-x-8">
+                    <div className="font-bold">
+                        <>
+                            <h1 className="text-4xl text-center sm:text-5xl sm:text-left md:text-6xl text-orange-400">Have some Query ?</h1>
+                            <p className="text-xl text-center sm:text-left md:text-2xl">Dont worry, we got your back...</p>
+                        </>
 
-            <div className="flex flex-col md:flex-row items-center justify-around gap-y-12 md:gap-x-8">
-                <div className="font-bold">
-                    <>
-                        <h1 className="text-4xl text-center sm:text-5xl sm:text-left md:text-6xl text-orange-400">Have some Query ?</h1>
-                        <p className="text-xl text-center sm:text-left md:text-2xl">Dont worry, we got your back...</p>
-                    </>
+                        <div className="flex flex-row mt-10 sm:gap-x-10">
+                            <Separator
+                                orientation="vertical"
+                                className="bg-zinc-700 dark:bg-white w-[2px] h-[10] hidden sm:block"
+                            />
 
-                    <div className="flex flex-row mt-10 sm:gap-x-10">
-                        <Separator
-                            orientation="vertical"
-                            className="bg-zinc-700 dark:bg-white w-[2px] h-[10] hidden sm:block"
+                            <motion.ul
+                                className="text-xl text-green-500 dark:text-zinc-300 list-disc sm:list-decimal py-3 md:py-1"
+                                variants={queryListContainer}
+                                initial={`hidden`}
+                                whileInView={`show`}
+                                viewport={{ once: true }}
+                            >
+                                {querySolvingSteps.map((items: { title: string }) => (
+                                    <motion.li
+                                        key={items.title}
+                                        variants={queryListVariants}
+                                    >
+                                        {items.title}
+                                    </motion.li>
+                                ))}
+                            </motion.ul>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <Calendar
+                            mode="single"
+                            selected={queryDate}
+                            onSelect={setQueryDate}
+                            className="border rounded-lg border-zinc-900 dark:border-zinc-200"
+                            disabled={{ before: new Date(tomorrowDate) }}
                         />
 
-                        <motion.ul
-                            className="font-2xl list-disc sm:list-decimal py-3 md:py-1"
-                            variants={queryListContainer}
-                            initial={`hidden`}
-                            whileInView={`show`}
-                            viewport={{ once: true }}
-                        >
-                            {querySolvingSteps.map((items: { title: string }) => (
-                                <motion.li
-                                    key={items.title}
-                                    variants={queryListVariants}
-                                >
-                                    {items.title}
-                                </motion.li>
-                            ))}
-                        </motion.ul>
+                        <Alert className="text-center border border-zinc-900 dark:border-zinc-200">
+                            <AlertTitle className="text-xl font-bold">Selected Date</AlertTitle>
+                            <AlertDescription>{date}</AlertDescription>
+                        </Alert>
+
+                        {user ? (
+                            <Button
+                                className="w-full font-bold"
+                                onClick={() => {
+                                    queryPopUp();
+                                }}
+                            >
+                                Submit
+                            </Button>
+                        ) : (
+                            <SignInBtn className="w-full" />
+                        )}
                     </div>
                 </div>
-
-                <div className="space-y-3">
-                    <Calendar
-                        mode="single"
-                        selected={queryDate}
-                        onSelect={setQueryDate}
-                        className="border rounded-lg border-zinc-900 dark:border-zinc-200"
-                        disabled={{ before: new Date(tomorrowDate) }}
-                    />
-
-                    <Alert className="text-center border border-zinc-900 dark:border-zinc-200">
-                        <AlertTitle className="text-xl font-bold">Selected Date</AlertTitle>
-                        <AlertDescription>{date}</AlertDescription>
-                    </Alert>
-
-                    {user ? (
-                        <Button
-                            className="w-full font-bold"
-                            onClick={() => {
-                                queryPopUp();
-                            }}
-                        >
-                            Submit
-                        </Button>
-                    ) : (
-                        <SignInBtn className="w-full" />
-                    )}
-                </div>
-            </div>
+            </Suspense>
         </section>
     );
 };

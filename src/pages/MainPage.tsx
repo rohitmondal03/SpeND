@@ -1,16 +1,23 @@
-import CreditCardIntro from "@/components/credit-intro-section"
+import { Suspense, lazy } from "react"
+
 import MainIntro from "@/components/main-intro"
-import CEOWordsSection from "@/components/ceo-words"
-import AdvantagesSection from "@/components/AdvantagesSection"
+import Loading from "@/components/loading"
+
+// DYNAMIC IMPORTS
+const AdvantagesSection = lazy(() => import("@/components/AdvantagesSection"))
+const CEOWordsSection = lazy(() => import("@/components/ceo-words"))
+const CreditCardIntro = lazy(() => import("@/components/credit-intro-section"))
 
 
 const MainPage = () => {
     return (
         <>
             <MainIntro />
-            <CreditCardIntro />
-            <CEOWordsSection />
-            <AdvantagesSection />
+            <Suspense fallback={<Loading />}>
+                <CreditCardIntro />
+                <CEOWordsSection />
+                <AdvantagesSection />
+            </Suspense>
         </>
     )
 }
