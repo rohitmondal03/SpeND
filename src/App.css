@@ -5,3 +5,11 @@
     padding: 0;
     font-family: 'Montserrat', sans-serif;;
 }
+
+::-webkit-scrollbar {
+    @apply bg-transparent px-3;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-zinc-600 to-zinc-400 rounded-full border-2 border-transparent;
+}   

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -163,17 +164,18 @@ const NewCreditCard = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{
                         duration: 0.5,
-                        delay: 0.3,
+                        delay: 2,
                         type: "spring",
                         stiffness: 100,
                     }}
                 >
-                    <motion.img
+                    <img
                         src={"/assets/credit-card.jpg"}
                         alt="credit card image"
                         height={600}
                         width={600}
                         className="rounded-2xl"
+                        loading="eager"
                     />
                 </motion.div>
             </div>
