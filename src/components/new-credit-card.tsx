@@ -1,8 +1,6 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-
-// import { faker } from "@faker-js/faker"
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -70,7 +68,7 @@ export default function DialogForCreditCard() {
 
 
     // ORDER SUBMIT POP UP
-    const toastPop = useCallback(async () => {
+    const toastPop = async () => {
         const { error } = await supabase
             .from("Order")
             .insert({
@@ -94,13 +92,9 @@ export default function DialogForCreditCard() {
             toast({
                 title: "Ordered !!",
                 description: "Thanks for ordering Credit Card from us. Your Credit Card will be delivered in the given address.",
-                action: (
-                    <ToastAction altText="Undo">Undo</ToastAction>
-                ),
             })
         }
-
-    }, [])
+    }
 
 
 

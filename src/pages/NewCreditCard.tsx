@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
@@ -66,10 +66,12 @@ const NewCreditCard = () => {
 
 
     // QUERY SUBMITTED OR NOT
-    const queryPopUp = useCallback(async () => {
+    const queryPopUp = async () => {
         const { error } = await supabase
             .from("Query")
-            .insert({ QueryId: uuidv4() + userID, CustomerID: userID, queryDate: queryDate })
+            .insert({ QueryId: uuidv4() + userID, CustomerID: userID, queryDate: queryDate  })
+        console.log(queryDate);
+        
 
         if (error) {
             toast({
@@ -89,7 +91,7 @@ const NewCreditCard = () => {
                 )
             })
         }
-    }, [date])
+    }
 
 
     useEffect(() => {
